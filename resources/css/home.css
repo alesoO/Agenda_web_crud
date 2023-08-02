@@ -1,0 +1,26 @@
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+.titulos{
+    font-family: 'Rajdhani', sans-serif !important;
+}
+
+header{
+    font-family: 'Rajdhani', sans-serif;
+}
+
+@media screen and (min-width: 992px) {
+    .header_buttons{
+        margin: 0.3em !important;
+    }
+    
+}
+.header_list{
+    display: flex;
+}
+@media screen and (max-width: 991px){
+    .header_list{
+        display: block !important;
+    }
+}
