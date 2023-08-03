@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <!-- sass e javascript -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
@@ -50,7 +51,7 @@
                                     Olá -
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="">Novo Post</a></li>
+                                    <li><a class="dropdown-item" href="/newpost">Novo Post</a></li>
                                     <form action="/logout" method="post">
                                         @csrf
                                         <li><button type="submit" class="dropdown-item">Sair</button></li>

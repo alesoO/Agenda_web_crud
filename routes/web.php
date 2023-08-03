@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Monolog\Handler\RotatingFileHandler;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,14 +19,22 @@ use Monolog\Handler\RotatingFileHandler;
 */
 
 Route::get('/', function () {
-    return view('home');
+    $posts = Post::all();
+    return view('home', ['posts' => $posts]);
 });
 Route::get('/cadastrar', function () {
     return view('register');
 });
+Route::get('/newpost', function () {
+    return view('post');
+});
+//rotas de usuarios
 Route::post('/register',[UserController::class, 'cadastro']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/login', [UserController::class, 'login']);
+
+Route::post('/editpost/{post}', [PostController::class, 'telaEditarPost']);
+Route::post('/createpost', [PostController::class, 'createPost']);
 
 Route::get('/login', function () {
     return view('login');
