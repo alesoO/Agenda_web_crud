@@ -4,17 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
     public function createPost(Request $request)
     {
-
-        $camposValores = $request->validate([
+        $validator = Validator::make($request->all(), [
             'title' => ['required'],
             'body' => ['required'],
             'imagem' => ['required', 'image']
         ]);
+
+        if ($validator->fails()) {
+            return redirect('/newpost')->with('error', 'Dados do post invalidos!');
+        } else {
+            $camposValores = $request->validate([
+                'title' => ['required'],
+                'body' => ['required'],
+                'imagem' => ['required', 'image']
+            ]);
+        }
 
         $imagemPath = $request->file('imagem')->store('public/uploads');
         $nomeArquivo = basename($imagemPath);
@@ -24,7 +34,7 @@ class PostController extends Controller
         $camposValores['user_id'] = auth()->id();
         $camposValores['imagem'] = 'storage/uploads/' . $nomeArquivo;
         Post::create($camposValores);
-        return redirect('/');
+        return redirect('/')->with('message', 'Post cadastrado com sucesso !');
     }
     public function telaEditarPost(Post $post)
     {
@@ -33,11 +43,21 @@ class PostController extends Controller
 
     public function updatePost(Post $post, Request $request)
     {
-        if (auth()->user()->id === $post('user_id')) {
-            $camposValores = $request->validate([
+        if (auth()->user()->id === $post->user_id) {
+
+            $validator = Validator::make($request->all(), [
                 'title' => ['required'],
                 'body' => ['required'],
             ]);
+
+            if ($validator->fails()) {
+                return redirect('/')->with('error', 'Dados da edição de post invalidos!');
+            } else {
+                $camposValores = $request->validate([
+                    'title' => ['required'],
+                    'body' => ['required'],
+                ]);
+            }
 
             $camposValores['title'] = strip_tags($camposValores['title']);
             $camposValores['body'] = strip_tags($camposValores['body']);
@@ -49,13 +69,13 @@ class PostController extends Controller
             }
             $post->update($camposValores);
         }
-        return redirect('/');
+        return redirect('/')->with('message', 'Post editado com sucesso !');
     }
     public function deletePost(Post $post)
     {
         if (auth()->user()->id === $post->user_id) {
             $post->delete();
         }
-        return redirect('/');
+        return redirect('/')->with('info', 'Post deletado com sucesso !');
     }
 }

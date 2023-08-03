@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <!-- sass e javascript -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -48,7 +51,7 @@
                                 <button
                                     class="btn btn-outline-primary d-flex justify-content-center align-items-center mt-2 dropdown-toggle fs-4"
                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Olá -
+                                    Olá - {{ auth()->user()->name }}
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="/newpost">Novo Post</a></li>
@@ -85,15 +88,55 @@
             </div>
 
             <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-                <li class="ms-3"><a class="text-body-secondary" href=""><x-simpleline-social-twitter /></a>
+                <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-twitter"></i></a>
                 </li>
-                <li class="ms-3"><a class="text-body-secondary" href=""><x-simpleline-social-instagram /></a>
+                <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-instagram"></i></a>
                 </li>
                 <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-linkedin"></i></a>
                 </li>
             </ul>
 
         </footer>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+            integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+        @if (Session::has('message'))
+            <script>
+                toastr.options = {
+                    "progressBar": true,
+                    "closeButton": true
+                }
+                toastr.success("{{ Session::get('message') }}", 'Sucesso!', {
+                    timeOut: 12000
+                });
+            </script>
+        @endif
+        @if (Session::has('error'))
+            <script>
+                toastr.options = {
+                    "progressBar": true,
+                    "closeButton": true
+                }
+                toastr.error("{{ Session::get('error') }}", 'Erro!', {
+                    timeOut: 12000
+                });
+            </script>
+        @endif
+        @if (Session::has('info'))
+        <script>
+            toastr.options = {
+                "progressBar": true,
+                "closeButton": true
+            }
+            toastr.info("{{ Session::get('info') }}", 'Info!', {
+                timeOut: 12000
+            });
+        </script>
+    @endif
 </body>
 
 </html>
+singerror

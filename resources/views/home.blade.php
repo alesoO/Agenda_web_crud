@@ -3,7 +3,7 @@
 @section('content')
     <main>
         <div class="container-sm">
-            <div class="container  pt-5">
+            <div class="container pt-5">
                 <h2 class="border-bottom border-primary titulos">Posts</h2>
             </div>
             <div class="row row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-2 mt-5">
@@ -14,7 +14,7 @@
                                 src="{{ asset($post->imagem) }}" />
                             <div class="card-body">
                                 <h4 class="titulo-card">{{ $post['title'] }}</h4>
-                                <h5>Por: {{$post->user->name}}</h5>
+                                <h5>Por: {{ $post->user->name }}</h5>
                                 <p class="card-text">{{ $post['body'] }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-body-secondary">{{ $post['updated_at'] }}</small>
@@ -38,7 +38,8 @@
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header bg-danger text-white titulos">
-                                                                <h1 class="modal-title fs-5 fw-bold" id="avisoLabel">Aviso! -
+                                                                <h1 class="modal-title fs-5 fw-bold" id="avisoLabel">Aviso!
+                                                                    -
                                                                     Essa ação não pode ser desfeita!
                                                                 </h1>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -71,7 +72,5 @@
                 @endforeach
             </div>
         </div>
-
     </main>
-
 @endsection
