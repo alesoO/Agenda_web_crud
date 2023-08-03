@@ -47,7 +47,7 @@
                                 class="bi bi-question-circle-fill"></i> Suporte</a></li>
                     @auth
                         <li class="nav-item">
-                            <div class="dropdown">
+                            <div class="dropdown display_desktop">
                                 <button
                                     class="btn btn-outline-primary d-flex justify-content-center align-items-center mt-2 dropdown-toggle fs-4"
                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,10 +59,19 @@
                                         @csrf
                                         <li><button type="submit" class="dropdown-item">Sair</button></li>
                                     </form>
-
                                 </ul>
                             </div>
                         </li>
+                        <div class="display_mobile">
+                            <li class="nav-item"><a href="/newpost"
+                                    class="d-block p-2 fs-4 m-2 mx-3 header_buttons btn btn-outline-primary">Novo Post</a>
+                            </li>
+                            <form class="d-flex justify-content-center flex-fill" action="/logout" method="post">
+                                @csrf
+                                <button type="submit"
+                                    class="flex-fill p-2 fs-4 m-2 mx-3 header_buttons btn btn-danger">Sair</button>
+                            </form>
+                        </div>
                     @else
                         <li class="nav-item"><a href="/login"
                                 class="d-block p-2 fs-4 m-2 mx-3 header_buttons btn btn-outline-primary">Login</a></li>
@@ -74,7 +83,9 @@
                 </ul>
             </nav>
         </div>
+
     </header>
+
     {{-- conteudo --}}
     @yield('content')
     <div class="container">
@@ -90,7 +101,8 @@
             <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
                 <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-twitter"></i></a>
                 </li>
-                <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-instagram"></i></a>
+                <li class="ms-3"><a class="text-body-secondary" href=""><i
+                            class="bi fs-4 bi-instagram"></i></a>
                 </li>
                 <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-linkedin"></i></a>
                 </li>
@@ -126,17 +138,16 @@
             </script>
         @endif
         @if (Session::has('info'))
-        <script>
-            toastr.options = {
-                "progressBar": true,
-                "closeButton": true
-            }
-            toastr.info("{{ Session::get('info') }}", 'Info!', {
-                timeOut: 12000
-            });
-        </script>
-    @endif
+            <script>
+                toastr.options = {
+                    "progressBar": true,
+                    "closeButton": true
+                }
+                toastr.info("{{ Session::get('info') }}", 'Info!', {
+                    timeOut: 12000
+                });
+            </script>
+        @endif
 </body>
 
 </html>
-singerror

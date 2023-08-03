@@ -1,35 +1,52 @@
-body{
+body {
     font-family: 'Roboto', sans-serif;
 }
 
-.titulos{
+.titulos {
     font-family: 'Rajdhani', sans-serif !important;
 }
 
-header{
+header {
     font-family: 'Rajdhani', sans-serif;
 }
 
 @media screen and (min-width: 992px) {
-    .header_buttons{
+    .header_buttons {
         margin: 0.3em !important;
     }
-    
-}
-.header_list{
-    display: flex;
-}
-@media screen and (max-width: 991px){
-    .header_list{
+
+    .display_mobile {
+        display: none !important;
+    }
+    .display_desktop{
         display: block !important;
     }
 }
+@media screen and (max-width: 992px) {
+    .display_desktop{
+        display: none !important;
+    }
+}
+
+
+.header_list {
+    display: flex;
+}
+
+@media screen and (max-width: 991px) {
+    .header_list {
+        display: block !important;
+    }
+}
+
 .toast-success {
     background-color: #51A351 !important;
 }
+
 .toast-error {
     background-color: #BD362F !important;
 }
+
 .toast-info {
     background-color: #2F96B4 !important;
 }
