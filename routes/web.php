@@ -17,7 +17,7 @@ use App\Http\Controllers\ProfileController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+//Rotas de Paginas
 Route::get('/', function () {
     $posts = Post::all();
     return view('home', ['posts' => $posts]);
@@ -28,13 +28,15 @@ Route::get('/cadastrar', function () {
 Route::get('/newpost', function () {
     return view('post');
 });
-//rotas de usuarios
+//Rotas de Usuarios
 Route::post('/register',[UserController::class, 'cadastro']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/login', [UserController::class, 'login']);
-
+//Rotas dos Posts
 Route::post('/editpost/{post}', [PostController::class, 'telaEditarPost']);
+Route::put('/editpost/{post}', [PostController::class, 'updatePost']);
 Route::post('/createpost', [PostController::class, 'createPost']);
+Route::delete('/deletepost/{post}', [PostController::class, 'deletePost']);
 
 Route::get('/login', function () {
     return view('login');

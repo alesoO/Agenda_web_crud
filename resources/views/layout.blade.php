@@ -38,7 +38,7 @@
                                 class="bi bi-chat-left-text"></i> Sobre nós</a></li>
                     <li class="nav-item"><a href="/"
                             class="d-block p-2 fs-4 m-2 mx-3 link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover"><i
-                                class="bi bi-shop"></i> Posts</a></li>
+                                class="bi bi-file-post"></i></i> Posts</a></li>
                     <li class="nav-item"><a href="/"
                             class="d-block p-2 fs-4 m-2 mx-3 link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover"><i
                                 class="bi bi-question-circle-fill"></i> Suporte</a></li>
