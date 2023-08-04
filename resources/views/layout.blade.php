@@ -55,6 +55,14 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="/newpost">Novo Post</a></li>
+                                    <form action="/edituser/{{ auth()->user()->id }}" method="post">
+                                        @csrf
+                                        <li><button type="submit" class="dropdown-item">Editar cadastro</button></li>
+                                    </form>
+                                    <button type="button" class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#aviso{{ auth()->user()->id }}">
+                                        Apagar cadastro
+                                    </button>
                                     <form action="/logout" method="post">
                                         @csrf
                                         <li><button type="submit" class="dropdown-item">Sair</button></li>
@@ -88,6 +96,44 @@
 
     {{-- conteudo --}}
     @yield('content')
+    @auth
+        <!-- Modal -->
+        <div class="modal fade" id="aviso{{ auth()->user()->id }}" tabindex="-1" aria-labelledby="avisoLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white titulos">
+                        <h1 class="modal-title fs-5 fw-bold" id="avisoLabel">Aviso!
+                            -
+                            Essa ação não pode ser desfeita!
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Tem certza que deseja apagar o seu cadastro ?
+                    </div>
+                    <div class="modal-footer d-flex">
+                        <form class="flex-fill" action="/deleteuser/{{ auth()->user()->id }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <div>
+                                <h3 class="h3 mb-3 fw-normal titulos fs-4">Confirme sua senha: </h3>
+                                <div class="form-floating">
+                                    <input type="password" name="password" id="password" class="mb-4 form-control"
+                                        placeholder="Confirmação da Senha">
+                                    <label>Senha</label>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-danger btn-lg">Sim</button>
+                                <button type="button" class="btn btn-secondary ms-2 btn-lg" data-bs-dismiss="modal">Fechar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endauth
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
             <div class="col-md-4 d-flex align-items-center">
@@ -99,12 +145,14 @@
             </div>
 
             <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-                <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-twitter"></i></a>
+                <li class="ms-3"><a class="text-body-secondary" href=""><i
+                            class="bi fs-4 bi-twitter"></i></a>
                 </li>
                 <li class="ms-3"><a class="text-body-secondary" href=""><i
                             class="bi fs-4 bi-instagram"></i></a>
                 </li>
-                <li class="ms-3"><a class="text-body-secondary" href=""><i class="bi fs-4 bi-linkedin"></i></a>
+                <li class="ms-3"><a class="text-body-secondary" href=""><i
+                            class="bi fs-4 bi-linkedin"></i></a>
                 </li>
             </ul>
 

@@ -32,6 +32,9 @@ Route::get('/newpost', function () {
 Route::post('/register',[UserController::class, 'cadastro']);
 Route::post('/logout', [UserController::class, 'logout']);
 Route::post('/login', [UserController::class, 'login']);
+Route::post('/edituser/{user}', [UserController::class, 'telaEditarUser']);
+Route::put('/edituser/{user}', [UserController::class, 'updateUser']);
+Route::delete('/deleteuser/{user}', [UserController::class, 'deleteUser']);
 //Rotas dos Posts
 Route::post('/editpost/{post}', [PostController::class, 'telaEditarPost']);
 Route::put('/editpost/{post}', [PostController::class, 'updatePost']);
