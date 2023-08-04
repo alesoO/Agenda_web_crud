@@ -1,9 +1,12 @@
+{{-- Import do layout --}}
 @extends('layout')
-@section('title','Pagina Cadastro')
-@section("content")
+{{-- Declaração do titulo da pagina --}}
+@section('title', 'Sign-In')
+{{-- Declarção do conteudo da pagina --}}
 <main>
     <div class="body_login">
         <div class="formulario w-100 m-auto">
+            {{-- Formulario de Cadastro --}}
             <form action="/register" method="post">
                 @csrf
                 <h1 class="h3 mb-3 fw-normal titulos fs-2">Cadastre-se</h1>

@@ -17,34 +17,51 @@ use App\Http\Controllers\ProfileController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-//Rotas de Paginas
+
+//Rotas de Paginas */
+/* Rota da pagina inicial */
 Route::get('/', function () {
     $posts = Post::all();
     return view('home', ['posts' => $posts]);
 });
+/* Rota da pagina de cadastro do usuario */
 Route::get('/cadastrar', function () {
     return view('register');
 });
+/* Rota da pagina de adição de post */
 Route::get('/newpost', function () {
     return view('post');
 });
-//Rotas de Usuarios
-Route::post('/register',[UserController::class, 'cadastro']);
-Route::post('/logout', [UserController::class, 'logout']);
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/edituser/{user}', [UserController::class, 'telaEditarUser']);
-Route::put('/edituser/{user}', [UserController::class, 'updateUser']);
-Route::delete('/deleteuser/{user}', [UserController::class, 'deleteUser']);
-//Rotas dos Posts
-Route::post('/editpost/{post}', [PostController::class, 'telaEditarPost']);
-Route::put('/editpost/{post}', [PostController::class, 'updatePost']);
-Route::post('/createpost', [PostController::class, 'createPost']);
-Route::delete('/deletepost/{post}', [PostController::class, 'deletePost']);
 
+/* Rota da pagina de Login de post */
 Route::get('/login', function () {
     return view('login');
 });
 
+//Rotas de Usuarios
+/* Rota para função de cadastro no controlador de usuarios */
+Route::post('/register', [UserController::class, 'cadastro']);
+/* Rota para função de logout no controlador de usuarios */
+Route::post('/logout', [UserController::class, 'logout']);
+/* Rota para função de login no controlador de usuarios */
+Route::post('/login', [UserController::class, 'login']);
+/* Rota para função de chamado da tela de edição de usuarios no controlador de usuarios */
+Route::post('/edituser/{user}', [UserController::class, 'telaEditarUser']);
+/* Rota para função de edição de usuarios no controlador de usuarios */
+Route::put('/edituser/{user}', [UserController::class, 'updateUser']);
+/* Rota para função de exclusão de usuario no controlador de usuarios */
+Route::delete('/deleteuser/{user}', [UserController::class, 'deleteUser']);
+
+//Rotas dos Posts
+
+/* Rota para função de chamado da tela de edição de posts no controlador de posts */
+Route::post('/editpost/{post}', [PostController::class, 'telaEditarPost']);
+/* Rota para função de edição de posts no controlador de posts */
+Route::put('/editpost/{post}', [PostController::class, 'updatePost']);
+/* Rota para função de adição de um post no controlador de posts */
+Route::post('/createpost', [PostController::class, 'createPost']);
+/* Rota para função de exclusão de posts no controlador de posts */
+Route::delete('/deletepost/{post}', [PostController::class, 'deletePost']);
 
 /* Route::get('/dashboard', function () {
     return view('dashboard');

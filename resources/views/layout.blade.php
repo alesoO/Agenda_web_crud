@@ -10,27 +10,30 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+    {{-- Framework toastr para notificações --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
         integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- Import do bootstrap icons --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-    <!-- sass e javascript -->
+    {{-- Imports do scss padrão do Laravel incluindo o bootstrap --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
 <body>
+    {{-- Inicio do Header --}}
     <header
         class="bg-body-secondary d-flex flex-wrap justify-content-center py-3 border-bottom border-black navbar navbar-expand-lg sticky-top">
         <div class="container">
-            <a href=""
+            <a href="/"
                 class="d-flex align-items-center mb-md-0 me-md-auto text-dark link-body-emphasis text-decoration-none">
                 <span class="fs-1 text-primary fw-bold titulos">Pagina dos Posts</span>
             </a>
-
+            {{-- Navbar do menu Mobile --}}
             <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu-navegacao">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+            {{-- Links de navegação do Header --}}
             <nav class="navbar-collapse collapse justify-content-end" id="menu-navegacao">
                 <ul class="nav nav-pills header_list">
                     <li class="nav-item"><a href="/"
@@ -45,31 +48,35 @@
                     <li class="nav-item"><a href="/"
                             class="d-block p-2 fs-4 m-2 mx-3 link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover"><i
                                 class="bi bi-question-circle-fill"></i> Suporte</a></li>
+                    {{-- Inicio do menu do usuario logado --}}
                     @auth
                         <li class="nav-item">
                             <div class="dropdown display_desktop">
                                 <button
                                     class="btn btn-outline-primary d-flex justify-content-center align-items-center mt-2 dropdown-toggle fs-4"
                                     type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Olá - {{ auth()->user()->name }}
+                                    Olá - {{ auth()->user()->name }} {{-- <- Exibe o nome do usuario cadastrado  --}}
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="/newpost">Novo Post</a></li>
                                     <form action="/edituser/{{ auth()->user()->id }}" method="post">
                                         @csrf
                                         <li><button type="submit" class="dropdown-item">Editar cadastro</button></li>
+                                        {{-- Link para o menu de edição --}}
                                     </form>
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal"
                                         data-bs-target="#aviso{{ auth()->user()->id }}">
-                                        Apagar cadastro
+                                        Apagar cadastro {{-- Ativador do modal de exclusão --}}
                                     </button>
                                     <form action="/logout" method="post">
                                         @csrf
                                         <li><button type="submit" class="dropdown-item">Sair</button></li>
+                                        {{-- Botão de Logout --}}
                                     </form>
                                 </ul>
                             </div>
                         </li>
+                        {{-- Parte do menu especifico para mobile --}}
                         <div class="display_mobile">
                             <li class="nav-item"><a href="/newpost"
                                     class="d-block p-2 fs-4 m-2 mx-3 header_buttons btn btn-outline-primary">Novo Post</a>
@@ -80,14 +87,15 @@
                                     class="flex-fill p-2 fs-4 m-2 mx-3 header_buttons btn btn-danger">Sair</button>
                             </form>
                         </div>
+                        {{-- Fim do menu do usuario --}}
                     @else
+                        {{-- É exibido caso o usuario não esteja logado --}}
                         <li class="nav-item"><a href="/login"
                                 class="d-block p-2 fs-4 m-2 mx-3 header_buttons btn btn-outline-primary">Login</a></li>
                         <li class="nav-item"><a href="/cadastrar"
                                 class="d-block p-2 fs-4 m-2 mx-3 header_buttons btn btn-primary">Cadastro</a>
                         </li>
                     @endauth
-
                 </ul>
             </nav>
         </div>
@@ -97,7 +105,7 @@
     {{-- conteudo --}}
     @yield('content')
     @auth
-        <!-- Modal -->
+        <!-- Modal de exculsão do usuario -->
         <div class="modal fade" id="aviso{{ auth()->user()->id }}" tabindex="-1" aria-labelledby="avisoLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -117,7 +125,7 @@
                             @csrf
                             @method('DELETE')
                             <div>
-                                <h3 class="h3 mb-3 fw-normal titulos fs-4">Confirme sua senha: </h3>
+                                <h3 class="h3 mb-3 fw-normal titulos fs-4">Confirme sua senha: </h3> {{-- Para a exclusão e nescessaria a senha do usuario --}}
                                 <div class="form-floating">
                                     <input type="password" name="password" id="password" class="mb-4 form-control"
                                         placeholder="Confirmação da Senha">
@@ -126,7 +134,8 @@
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-danger btn-lg">Sim</button>
-                                <button type="button" class="btn btn-secondary ms-2 btn-lg" data-bs-dismiss="modal">Fechar</button>
+                                <button type="button" class="btn btn-secondary ms-2 btn-lg"
+                                    data-bs-dismiss="modal">Fechar</button>
                             </div>
                         </form>
                     </div>
@@ -134,6 +143,7 @@
             </div>
         </div>
     @endauth
+    {{-- Fim do modal e Inicio do footer --}}
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
             <div class="col-md-4 d-flex align-items-center">
@@ -157,12 +167,14 @@
             </ul>
 
         </footer>
+        {{-- Import do Jquery --}}
         <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        {{-- Import do JavaScript do Toastr --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
             integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+        {{-- Script dos Toasts de mensagens de erros --}}
         @if (Session::has('message'))
             <script>
                 toastr.options = {

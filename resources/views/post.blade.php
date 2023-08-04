@@ -1,10 +1,13 @@
+{{-- Import do layout --}}
 @extends('layout')
-@section('title', 'Pagina Login')
+{{-- Declaração do titulo da pagina --}}
+@section('title', 'Novo Post')
+{{-- Declarção do conteudo da pagina --}}
 @section('content')
 
     <div class="body_login">
         <div class="formulario w-100 m-auto">
-
+            {{-- Formulario de Adição de post --}}
             <form enctype="multipart/form-data" action="/createpost" method="post">
                 @csrf
                 <h1 class="h3 mb-3 fw-normal titulos fs-2">Novo Post</h1>
