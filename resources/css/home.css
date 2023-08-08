@@ -18,12 +18,14 @@ header {
     .display_mobile {
         display: none !important;
     }
-    .display_desktop{
+
+    .display_desktop {
         display: block !important;
     }
 }
+
 @media screen and (max-width: 992px) {
-    .display_desktop{
+    .display_desktop {
         display: none !important;
     }
 }
@@ -49,4 +51,8 @@ header {
 
 .toast-info {
     background-color: #2F96B4 !important;
+}
+
+.checkbox-lg .form-check-input {
+    scale: 1.6;
 }

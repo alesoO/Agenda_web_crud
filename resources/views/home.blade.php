@@ -20,55 +20,64 @@
                                 src="{{ asset($post->imagem) }}" /> {{-- Recupera o endereço da imagem no banco de dados --}}
                             <div class="card-body">
                                 <h4 class="titulo-card">{{ $post['title'] }}</h4> {{-- Recupera o titulo do post --}}
-                                <h5>Por: {{ $post->user->name }}</h5> {{-- Recupera o autor do post --}}
+                                <h5>Autor original: {{ $post->user->name }}</h5> {{-- Recupera o autor do post --}}
+                                <h6>Outros autores; @foreach ($post->users as $user)
+                                        {{ $user->name }},
+                                    @endforeach
+                                </h6>
                                 <p class="card-text">{{ $post['body'] }}</p> {{-- Recupera o conteudo do post --}}
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-body-secondary">{{ $post['updated_at'] }}</small> {{-- Recupera a ultima atualização do post --}}
+                                    <small class="text-body-secondary">{{ $post['updated_at'] }}</small>
+                                    {{-- Recupera a ultima atualização do post --}}
                                     {{-- Menu de Configurações do post, apenas o usuario autor pode ver esse menu --}}
                                     @auth
-                                        @if ($post->user_id === auth()->id())
-                                            <div class="btn-group d-flex">
+                                        @if ($post->user_id === auth()->id() || $post->users->contains(auth()->user()))
+                                            <div class="d-flex" role="group">
                                                 <form action="/editpost/{{ $post->id }}" method="POST">
                                                     @csrf
                                                     <button type="submit"
-                                                        class="btn btn btn-outline-warning rounded-0 rounded-start"><i
+                                                        class="btn btn-outline-warning"><i
                                                             class="bi bi-pencil"></i></button> {{-- Link para o menu de edição --}}
                                                 </form>
+                                                @if ($post->user_id === auth()->id())
+                                                    <button type="button" class="btn mx-2 btn-outline-danger"
+                                                        data-bs-toggle="modal" data-bs-target="#aviso{{ $post->id }}">
+                                                        {{-- Ativador do modal de exclusão --}}
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                    <!-- Modal de exculsão do post -->
+                                                    <div class="modal fade" id="aviso{{ $post->id }}" tabindex="-1"
+                                                        aria-labelledby="avisoLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-danger text-white titulos">
+                                                                    <h1 class="modal-title fs-5 fw-bold" id="avisoLabel">Aviso!
+                                                                        -
+                                                                        Essa ação não pode ser desfeita!
+                                                                    </h1>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Tem certza que deseja apagar o post ?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary"
+                                                                        data-bs-dismiss="modal">Fechar</button>
 
-                                                <button type="button" class="btn btn-outline-danger rounded-0 rounded-end"
-                                                    data-bs-toggle="modal" data-bs-target="#aviso{{ $post->id }}"> {{-- Ativador do modal de exclusão --}}
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                                <!-- Modal de exculsão do post -->
-                                                <div class="modal fade" id="aviso{{ $post->id }}" tabindex="-1"
-                                                    aria-labelledby="avisoLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-danger text-white titulos">
-                                                                <h1 class="modal-title fs-5 fw-bold" id="avisoLabel">Aviso!
-                                                                    -
-                                                                    Essa ação não pode ser desfeita!
-                                                                </h1>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                Tem certza que deseja apagar o post ?
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Fechar</button>
+                                                                    <form action="/deletepost/{{ $post->id }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('DELETE')
+                                                                        <button type="submit"
+                                                                            class="btn btn-danger">Sim</button>
+                                                                    </form>
 
-                                                                <form action="/deletepost/{{ $post->id }}" method="POST">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <button type="submit" class="btn btn-danger">Sim</button>
-                                                                </form>
-
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @endif
                                             </div>
                                         @endif
                                     @endauth

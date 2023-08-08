@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,9 +26,15 @@ class PostController extends Controller
             $camposValores = $request->validate([
                 'title' => ['required'],
                 'body' => ['required'],
-                'imagem' => ['required', 'image']
+                'imagem' => ['required', 'image'],
+                'emailAuthor2' =>[],
+                'emailAuthor3' =>[],
+                'emailAuthor4' =>[],
+                'emailAuthor5' =>[],
+                'emailAuthor6' =>[]
             ]);
         }
+
         /* armazena a imagem do campo nos arquivos do servidor e manda para o banco de dados o endreço dela no servidor */
         $imagemPath = $request->file('imagem')->store('public/uploads');
         $nomeArquivo = basename($imagemPath);
@@ -35,8 +43,36 @@ class PostController extends Controller
         $camposValores['body'] = strip_tags($camposValores['body']);
         $camposValores['user_id'] = auth()->id();
         $camposValores['imagem'] = 'storage/uploads/' . $nomeArquivo;
-        Post::create($camposValores);
-        return redirect('/')->with('message', 'Post cadastrado com sucesso !');
+        $multipleAuthors = $request->input('multiple_authors', 0);
+
+        if ($multipleAuthors == 1) {
+            $count = 2;
+            $userIds = [];
+            $userIds[] = auth()->id();
+
+            do {
+                $field = 'emailAuthor' . $count;
+                $emailValue = Arr::get($camposValores, $field);
+
+                if (!empty($emailValue)) {
+                    $user = User::where('email', $emailValue)->first();
+
+                    if ($user) {
+                        $userIds[] = $user->id;
+                    }
+                }
+
+                $count++;
+            } while ($count <= 6);
+
+            $post = Post::create($camposValores);
+            $post->users()->sync($userIds);
+
+            return redirect('/')->with('message', 'Post cadastrado e relação criada com sucesso !');
+        } else {
+            Post::create($camposValores);
+            return redirect('/')->with('message', 'Post cadastrado com sucesso !');
+        }
     }
     /* Função para chamar e inserir os valores atuais na pagina de edição de posts */
     public function telaEditarPost(Post $post)

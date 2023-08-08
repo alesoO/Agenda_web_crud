@@ -24,6 +24,13 @@
                         <label>Senha</label>
                     </div>
 
+                    <div class="form-check my-4 ms-1">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Lembre-se de mim
+                        </label>
+                    </div>
+
                     <input type="submit" class="w-100 btn btn-lg btn-primary fs-4">
                 </form>
             </div>
