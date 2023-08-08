@@ -34,8 +34,13 @@ class UserController extends Controller
         }
         /* cryptografa a senha e cadastra o usuario e realiza o seu login */
         $camposValores['password'] = bcrypt($camposValores['password']);
-        $user = User::create($camposValores);
-        auth()->login($user);
+        try {
+            $user = User::create($camposValores);
+            auth()->login($user);
+        } catch (\Exception $e) {
+            $errormsg = $e->getMessage();
+            return redirect('/')->with('error', $errormsg);
+        }
         /* Informa ao usuario que a operação foi bem sucedida */
         return redirect('/')->with('message', 'Usuario cadastrado com sucesso !');
     }
@@ -87,11 +92,15 @@ class UserController extends Controller
             }
 
             /* Verifica a senha para a autorização da edição, e informa o usuario da situação do processo */
-
-            if (Hash::check($camposValores['password'], $user->password)) {
-                $user->update($camposValores);
-            } else {
-                return redirect('/')->with('error', 'Senha incorreta!');
+            try {
+                if (Hash::check($camposValores['password'], $user->password)) {
+                    $user->update($camposValores);
+                } else {
+                    return redirect('/')->with('error', 'Senha incorreta!');
+                }
+            } catch (\Exception $e) {
+                $errormsg = $e->getMessage();
+                return redirect('/')->with('error', $errormsg);
             }
             return redirect('/')->with('message', 'Usuario editado com sucesso !');
         }
@@ -100,40 +109,59 @@ class UserController extends Controller
     /* Função para o encerramento da sessão do usuario */
     public function logout()
     {
-        auth()->logout();
+        try {
+            auth()->logout();
+        } catch (\Exception $e) {
+            $errormsg = $e->getMessage();
+            return redirect('/')->with('error', $errormsg);
+        }
         return redirect('/')->with('info', 'Sessão encerrada com sucesso !');
     }
     /* Função para a exclusão do usuario */
     public function deleteUser(Request $request)
     {
         /* Verifica o ID do usuario para a autorização da exclusão */
-        $user = User::find(Auth::user()->id);
+        try {
+            $user = User::find(Auth::user()->id);
 
-        /* Verifica a senha para a autorização da exclusão, e informa o usuario da situação do processo */
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::logout();
-            if ($user->delete()) {
-                return redirect('/')->with('info', 'Sua conta foi excluída com sucesso.');
+            /* Verifica a senha para a autorização da exclusão, e informa o usuario da situação do processo */
+            if ($user && Hash::check($request->password, $user->password)) {
+                Auth::logout();
+                if ($user->delete()) {
+                    return redirect('/')->with('info', 'Sua conta foi excluída com sucesso.');
+                }
+            } else {
+                return redirect('/')->with('error', 'Senha incorreta. Tente novamente.');
             }
-        } else {
-            return redirect('/')->with('error', 'Senha incorreta. Tente novamente.');
+        } catch (\Exception $e) {
+            $errormsg = $e->getMessage();
+            return redirect('/')->with('error', $errormsg);
         }
     }
 
     /* Função para a realização do processo de Login */
     public function login(Request $request)
     {
-        /* valida os valores dos campos */
-        $camposValores = $request->validate([
-            'email' => ['required'],
-            'password' => ['required']
-        ]);
-        /* Verifica os valores apresentados com os cadastrados no banco de dados para o processo de login informa o usuario da situação do processo*/
-        if (auth()->attempt(['email' => $camposValores['email'], 'password' => $camposValores['password']])) {
-            $request->session()->regenerate();
-        } else {
-            return redirect('/login')->with('error', 'Login ou senha incorretos!');
+        try {
+            /* valida os valores dos campos */
+            $camposValores = $request->validate([
+                'email' => ['required'],
+                'password' => ['required']
+            ]);
+            /* Verifica os valores apresentados com os cadastrados no banco de dados para o processo de login informa o usuario da situação do processo*/
+            if (auth()->attempt(['email' => $camposValores['email'], 'password' => $camposValores['password']])) {
+                $request->session()->regenerate();
+            } else {
+                return redirect('/login')->with('error', 'Login ou senha incorretos!');
+            }
+            return redirect('/')->with('message', 'Login realizado com sucesso !');
+        } catch (\Exception $e) {
+            $errormsg = $e->getMessage();
+            return redirect('/')->with('error', $errormsg);
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == 23000) {
+                return redirect('/')->with('error', 'Esse post não pode ser Deletado, pois ele possui relação com outro usuarios!');
+            }
         }
-        return redirect('/')->with('message', 'Login realizado com sucesso !');
     }
 }

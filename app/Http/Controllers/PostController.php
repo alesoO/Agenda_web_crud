@@ -27,11 +27,11 @@ class PostController extends Controller
                 'title' => ['required'],
                 'body' => ['required'],
                 'imagem' => ['required', 'image'],
-                'emailAuthor2' =>[],
-                'emailAuthor3' =>[],
-                'emailAuthor4' =>[],
-                'emailAuthor5' =>[],
-                'emailAuthor6' =>[]
+                'emailAuthor2' => [],
+                'emailAuthor3' => [],
+                'emailAuthor4' => [],
+                'emailAuthor5' => [],
+                'emailAuthor6' => []
             ]);
         }
 
@@ -43,8 +43,16 @@ class PostController extends Controller
         $camposValores['body'] = strip_tags($camposValores['body']);
         $camposValores['user_id'] = auth()->id();
         $camposValores['imagem'] = 'storage/uploads/' . $nomeArquivo;
-        $multipleAuthors = $request->input('multiple_authors', 0);
 
+        try {
+            $post = Post::create($camposValores);
+            $post->users()->sync($camposValores['user_id']);
+        } catch (\Exception $e) {
+            $errormsg = $e->getMessage();
+            return redirect('/')->with('error', $errormsg);
+        }
+
+        $multipleAuthors = $request->input('multiple_authors', 0);
         if ($multipleAuthors == 1) {
             $count = 2;
             $userIds = [];
@@ -65,12 +73,15 @@ class PostController extends Controller
                 $count++;
             } while ($count <= 6);
 
-            $post = Post::create($camposValores);
-            $post->users()->sync($userIds);
+            try {
+                $post->users()->sync($userIds);
+            } catch (\Exception $e) {
+                $errormsg = $e->getMessage();
+                return redirect('/')->with('error', $errormsg);
+            }
 
             return redirect('/')->with('message', 'Post cadastrado e relação criada com sucesso !');
         } else {
-            Post::create($camposValores);
             return redirect('/')->with('message', 'Post cadastrado com sucesso !');
         }
     }
@@ -107,7 +118,12 @@ class PostController extends Controller
                 $nomeArquivo = basename($imagemPath);
                 $camposValores['imagem'] = 'storage/uploads/' . $nomeArquivo;
             }
-            $post->update($camposValores);
+            try {
+                $post->update($camposValores);
+            } catch (\Exception $e) {
+                $errormsg = $e->getMessage();
+                return redirect('/')->with('error', $errormsg);
+            }
         }
         return redirect('/')->with('message', 'Post editado com sucesso !');
     }
@@ -115,7 +131,17 @@ class PostController extends Controller
     public function deletePost(Post $post)
     {
         if (auth()->user()->id === $post->user_id) {
-            $post->delete();
+
+            try {
+                $post->delete();
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($e->getCode() == 23000) {
+                    return redirect('/')->with('error', 'Esse post não pode ser Deletado, pois ele possui relação com outro usuarios!');
+                }
+            } catch (\Exception $e) {
+                $errormsg = $e->getMessage();
+                return redirect('/')->with('error', $errormsg);
+            }
         }
         return redirect('/')->with('info', 'Post deletado com sucesso !');
     }
