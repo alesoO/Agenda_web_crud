@@ -1,7 +1,7 @@
 {{-- Import do layout --}}
 @extends('layout')
 {{-- Declaração do titulo da pagina --}}
-@section('title', 'Sign-In')
+@section('title', 'Cadastre-se')
 {{-- Declarção do conteudo da pagina --}}
 @section('content')
     <main>

@@ -4,8 +4,7 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
-use Monolog\Handler\RotatingFileHandler;
-use App\Http\Controllers\ProfileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +24,7 @@ Route::get('/', function () {
     return view('home', ['posts' => $posts]);
 });
 /* Rota da pagina de cadastro do usuario */
-Route::get('/cadastrar', function () {
+Route::get('/register', function () {
     return view('register');
 });
 /* Rota da pagina de adição de post */
@@ -40,13 +39,13 @@ Route::get('/login', function () {
 
 //Rotas de Usuarios
 /* Rota para função de cadastro no controlador de usuarios */
-Route::post('/register', [UserController::class, 'cadastro']);
+Route::post('/register', [UserController::class, 'createUser']);
 /* Rota para função de logout no controlador de usuarios */
 Route::post('/logout', [UserController::class, 'logout']);
 /* Rota para função de login no controlador de usuarios */
 Route::post('/login', [UserController::class, 'login']);
 /* Rota para função de chamado da tela de edição de usuarios no controlador de usuarios */
-Route::post('/edituser/{user}', [UserController::class, 'telaEditarUser']);
+Route::post('/edituser/{user}', [UserController::class, 'editUser']);
 /* Rota para função de edição de usuarios no controlador de usuarios */
 Route::put('/edituser/{user}', [UserController::class, 'updateUser']);
 /* Rota para função de exclusão de usuario no controlador de usuarios */
@@ -55,7 +54,7 @@ Route::delete('/deleteuser/{user}', [UserController::class, 'deleteUser']);
 //Rotas dos Posts
 
 /* Rota para função de chamado da tela de edição de posts no controlador de posts */
-Route::post('/editpost/{post}', [PostController::class, 'telaEditarPost']);
+Route::post('/editpost/{post}', [PostController::class, 'editPost']);
 /* Rota para função de edição de posts no controlador de posts */
 Route::put('/editpost/{post}', [PostController::class, 'updatePost']);
 /* Rota para função de adição de um post no controlador de posts */

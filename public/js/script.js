@@ -4,17 +4,17 @@ $(document).ready(function () {
 
     $('#flexSwitchCheckDefault').on('change', function () {
         if ($(this).is(':checked')) {
-            $('#camposAutores').show();
+            $('#fieldAuthors').show();
         } else {
-            $('#camposAutores').hide();
+            $('#fieldAuthors').hide();
         }
     });
 
     $('#addEmailField').on('click', function () {
     
         if (emailCounter <= maxEmailFields) {
-            const nextEmailField = $(`.email-field:hidden:first`);
-            nextEmailField.show().addClass('d-flex');
+            const NEXTEMAILFIELD = $(`.email-field:hidden:first`);
+            NEXTEMAILFIELD.show().addClass('d-flex');
             emailCounter++;
         }
     });

@@ -11,22 +11,22 @@ use Illuminate\Support\Facades\Validator;
 class PostController extends Controller
 {
     /* Função para a criação de um post */
-    public function createPost(Request $request)
+    public function createpost(Request $request)
     {
         /* Verifica os valores de cada um dos campos */
         $validator = Validator::make($request->all(), [
             'title' => ['required'],
             'body' => ['required'],
-            'imagem' => ['required', 'image']
+            'image' => ['required', 'image']
         ]);
 
         if ($validator->fails()) {
             return redirect('/newpost')->with('error', 'Dados do post invalidos!');
         } else {
-            $camposValores = $request->validate([
+            $fieldValues = $request->validate([
                 'title' => ['required'],
                 'body' => ['required'],
-                'imagem' => ['required', 'image'],
+                'image' => ['required', 'image'],
                 'emailAuthor2' => [],
                 'emailAuthor3' => [],
                 'emailAuthor4' => [],
@@ -35,18 +35,18 @@ class PostController extends Controller
             ]);
         }
 
-        /* armazena a imagem do campo nos arquivos do servidor e manda para o banco de dados o endreço dela no servidor */
-        $imagemPath = $request->file('imagem')->store('public/uploads');
-        $nomeArquivo = basename($imagemPath);
+        /* armazena a image do campo nos arquivos do servidor e manda para o banco de dados o endreço dela no servidor */
+        $imagePath = $request->file('image')->store('public/uploads');
+        $nomeArquivo = basename($imagePath);
 
-        $camposValores['title'] = strip_tags($camposValores['title']);
-        $camposValores['body'] = strip_tags($camposValores['body']);
-        $camposValores['user_id'] = auth()->id();
-        $camposValores['imagem'] = 'storage/uploads/' . $nomeArquivo;
+        $fieldValues['title'] = strip_tags($fieldValues['title']);
+        $fieldValues['body'] = strip_tags($fieldValues['body']);
+        $fieldValues['user_id'] = auth()->id();
+        $fieldValues['image'] = 'storage/uploads/' . $nomeArquivo;
 
         try {
-            $post = Post::create($camposValores);
-            $post->users()->sync($camposValores['user_id']);
+            $post = Post::create($fieldValues);
+            $post->users()->sync($fieldValues['user_id']);
         } catch (\Exception $e) {
             $errormsg = $e->getMessage();
             return redirect('/')->with('error', $errormsg);
@@ -60,7 +60,7 @@ class PostController extends Controller
 
             do {
                 $field = 'emailAuthor' . $count;
-                $emailValue = Arr::get($camposValores, $field);
+                $emailValue = Arr::get($fieldValues, $field);
 
                 if (!empty($emailValue)) {
                     $user = User::where('email', $emailValue)->first();
@@ -86,7 +86,7 @@ class PostController extends Controller
         }
     }
     /* Função para chamar e inserir os valores atuais na pagina de edição de posts */
-    public function telaEditarPost(Post $post)
+    public function editPost(Post $post)
     {
         return view('edit-post', ['post' => $post]);
     }
@@ -104,22 +104,22 @@ class PostController extends Controller
             if ($validator->fails()) {
                 return redirect('/')->with('error', 'Dados da edição de post invalidos!');
             } else {
-                $camposValores = $request->validate([
+                $fieldValues = $request->validate([
                     'title' => ['required'],
                     'body' => ['required'],
                 ]);
             }
 
-            $camposValores['title'] = strip_tags($camposValores['title']);
-            $camposValores['body'] = strip_tags($camposValores['body']);
+            $fieldValues['title'] = strip_tags($fieldValues['title']);
+            $fieldValues['body'] = strip_tags($fieldValues['body']);
             /* Realiza o processo de atualização do post e informa o usuario */
-            if ($request->hasFile('imagem')) {
-                $imagemPath = $request->file('imagem')->store('public/uploads');
-                $nomeArquivo = basename($imagemPath);
-                $camposValores['imagem'] = 'storage/uploads/' . $nomeArquivo;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('public/uploads');
+                $nomeArquivo = basename($imagePath);
+                $fieldValues['image'] = 'storage/uploads/' . $nomeArquivo;
             }
             try {
-                $post->update($camposValores);
+                $post->update($fieldValues);
             } catch (\Exception $e) {
                 $errormsg = $e->getMessage();
                 return redirect('/')->with('error', $errormsg);

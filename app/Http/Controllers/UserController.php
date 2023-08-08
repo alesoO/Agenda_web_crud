@@ -13,7 +13,7 @@ class UserController extends Controller
 {
 
     /* Função para o cadastro de usuarios */
-    public function cadastro(Request $request)
+    public function createUser(Request $request)
     {
         /* valida os valores dos campos */
         $validator = Validator::make($request->all(), [
@@ -21,21 +21,20 @@ class UserController extends Controller
             'email' => ['required', Rule::unique('users', 'email')],
             'password' => ['required', 'min:8']
         ]);
-
         /* Informa erros com os valores aos usuarios */
         if ($validator->fails()) {
             return redirect('/')->with('error', 'Dados invalidos!');
         } else {
-            $camposValores = $request->validate([
+            $fieldValues = $request->validate([
                 'name' => ['required', Rule::unique('users', 'name')],
                 'email' => ['required', Rule::unique('users', 'email')],
                 'password' => ['required', 'min:8']
             ]);
         }
         /* cryptografa a senha e cadastra o usuario e realiza o seu login */
-        $camposValores['password'] = bcrypt($camposValores['password']);
+        $fieldValues['password'] = bcrypt($fieldValues['password']);
         try {
-            $user = User::create($camposValores);
+            $user = User::create($fieldValues);
             auth()->login($user);
         } catch (\Exception $e) {
             $errormsg = $e->getMessage();
@@ -45,7 +44,7 @@ class UserController extends Controller
         return redirect('/')->with('message', 'Usuario cadastrado com sucesso !');
     }
     /* Função para chamar e inserir os valores atuais na pagina de edição de usuario */
-    public function telaEditarUser(User $user)
+    public function editUser(User $user)
     {
         return view('edit-user', ['user' => $user]);
     }
@@ -69,32 +68,32 @@ class UserController extends Controller
                 if ($validatorEmail->fails()) {
                     return redirect('/')->with('error', 'Dados da edição de usuario invalidos!');
                 } else {
-                    $camposValores = $request->validate([
+                    $fieldValues = $request->validate([
                         'email' => ['required', Rule::unique('users', 'email')],
                         'password' => ['required']
                     ]);
-                    $camposValores['email'] = strip_tags($camposValores['email']);
+                    $fieldValues['email'] = strip_tags($fieldValues['email']);
                 }
             } elseif ($validatorEmail->fails()) {
-                $camposValores = $request->validate([
+                $fieldValues = $request->validate([
                     'name' => ['required', Rule::unique('users', 'name')],
                     'password' => ['required']
                 ]);
-                $camposValores['name'] = strip_tags($camposValores['name']);
+                $fieldValues['name'] = strip_tags($fieldValues['name']);
             } else {
-                $camposValores = $request->validate([
+                $fieldValues = $request->validate([
                     'name' => ['required', Rule::unique('users', 'name')],
                     'email' => ['required', Rule::unique('users', 'email')],
                     'password' => ['required']
                 ]);
-                $camposValores['name'] = strip_tags($camposValores['name']);
-                $camposValores['email'] = strip_tags($camposValores['email']);
+                $fieldValues['name'] = strip_tags($fieldValues['name']);
+                $fieldValues['email'] = strip_tags($fieldValues['email']);
             }
 
             /* Verifica a senha para a autorização da edição, e informa o usuario da situação do processo */
             try {
-                if (Hash::check($camposValores['password'], $user->password)) {
-                    $user->update($camposValores);
+                if (Hash::check($fieldValues['password'], $user->password)) {
+                    $user->update($fieldValues);
                 } else {
                     return redirect('/')->with('error', 'Senha incorreta!');
                 }
@@ -144,24 +143,24 @@ class UserController extends Controller
     {
         try {
             /* valida os valores dos campos */
-            $camposValores = $request->validate([
+            $fieldValues = $request->validate([
                 'email' => ['required'],
                 'password' => ['required']
             ]);
             /* Verifica os valores apresentados com os cadastrados no banco de dados para o processo de login informa o usuario da situação do processo*/
-            if (auth()->attempt(['email' => $camposValores['email'], 'password' => $camposValores['password']])) {
+            if (auth()->attempt(['email' => $fieldValues['email'], 'password' => $fieldValues['password']])) {
                 $request->session()->regenerate();
             } else {
                 return redirect('/login')->with('error', 'Login ou senha incorretos!');
             }
             return redirect('/')->with('message', 'Login realizado com sucesso !');
-        } catch (\Exception $e) {
-            $errormsg = $e->getMessage();
-            return redirect('/')->with('error', $errormsg);
         } catch (\Illuminate\Database\QueryException $e) {
             if ($e->getCode() == 23000) {
                 return redirect('/')->with('error', 'Esse post não pode ser Deletado, pois ele possui relação com outro usuarios!');
             }
+        } catch (\Exception $e) {
+            $errormsg = $e->getMessage();
+            return redirect('/')->with('error', $errormsg);
         }
     }
 }

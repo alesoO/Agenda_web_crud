@@ -12,7 +12,7 @@
                 @csrf
                 <h1 class="h3 mb-3 fw-normal titulos fs-2">Novo Post</h1>
 
-                <input name="imagem" id="imagem" class="btn btn-outline-secondary rounded-0 rounded-3 form-control"
+                <input name="image" id="image" class="btn btn-outline-secondary rounded-0 rounded-3 form-control"
                     type='file' id="imageUpload" accept=".png, .jpg, .jpeg" />
                 <input type="hidden" name="MAX_FILE_SIZE" value="99999999" />
                 <label for="imageUpload"></label>
@@ -36,7 +36,7 @@
                         for="flexSwitchCheckDefault">Multiplos Autores</label>
                 </div>
 
-                <div id="camposAutores" style="display: none;">
+                <div id="fieldAuthors" style="display: none;">
                     <!-- Coloque aqui os campos adicionais que deseja exibir -->
                     <div class="d-flex justify-content-between align-items-center mt-2 mb-1">
                         <h2 class="h3 mb-2 fw-normal titulos fs-2 justfy-content-center">Outros Autores</h2>

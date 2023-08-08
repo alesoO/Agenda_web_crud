@@ -65,7 +65,7 @@
                                         {{-- Link para o menu de edição --}}
                                     </form>
                                     <button type="button" class="dropdown-item" data-bs-toggle="modal"
-                                        data-bs-target="#aviso{{ auth()->user()->id }}">
+                                        data-bs-target="#warning{{ auth()->user()->id }}">
                                         Apagar cadastro {{-- Ativador do modal de exclusão --}}
                                     </button>
                                     <form action="/logout" method="post">
@@ -92,7 +92,7 @@
                         {{-- É exibido caso o usuario não esteja logado --}}
                         <li class="nav-item"><a href="/login"
                                 class="d-block p-2 fs-4 m-2 mx-3 header_buttons btn btn-outline-primary">Login</a></li>
-                        <li class="nav-item"><a href="/cadastrar"
+                        <li class="nav-item"><a href="/register"
                                 class="d-block p-2 fs-4 m-2 mx-3 header_buttons btn btn-primary">Cadastro</a>
                         </li>
                     @endauth
@@ -106,12 +106,12 @@
     @yield('content')
     @auth
         <!-- Modal de exculsão do usuario -->
-        <div class="modal fade" id="aviso{{ auth()->user()->id }}" tabindex="-1" aria-labelledby="avisoLabel"
+        <div class="modal fade" id="warning{{ auth()->user()->id }}" tabindex="-1" aria-labelledby="warningLabel"
             aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-danger text-white titulos">
-                        <h1 class="modal-title fs-5 fw-bold" id="avisoLabel">Aviso!
+                        <h1 class="modal-title fs-5 fw-bold" id="warningLabel">Aviso!
                             -
                             Essa ação não pode ser desfeita!
                         </h1>
