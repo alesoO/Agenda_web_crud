@@ -37,12 +37,12 @@ class PostController extends Controller
 
         /* armazena a image do campo nos arquivos do servidor e manda para o banco de dados o endreço dela no servidor */
         $imagePath = $request->file('image')->store('public/uploads');
-        $nomeArquivo = basename($imagePath);
+        $imageName = basename($imagePath);
 
         $fieldValues['title'] = strip_tags($fieldValues['title']);
         $fieldValues['body'] = strip_tags($fieldValues['body']);
         $fieldValues['user_id'] = auth()->id();
-        $fieldValues['image'] = 'storage/uploads/' . $nomeArquivo;
+        $fieldValues['image'] = 'storage/uploads/' . $imageName;
 
         try {
             $post = Post::create($fieldValues);
@@ -115,8 +115,8 @@ class PostController extends Controller
             /* Realiza o processo de atualização do post e informa o usuario */
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('public/uploads');
-                $nomeArquivo = basename($imagePath);
-                $fieldValues['image'] = 'storage/uploads/' . $nomeArquivo;
+                $imageName = basename($imagePath);
+                $fieldValues['image'] = 'storage/uploads/' . $imageName;
             }
             try {
                 $post->update($fieldValues);
